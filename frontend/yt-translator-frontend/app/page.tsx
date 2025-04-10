@@ -8,7 +8,7 @@ export default function Home() {
     <div className="">
 <div className="mx-auto max-w-4xl sm:px-10 mt-10 text-center">
   <Typography type="h1">Welcome to YT-Translator.</Typography>
-<Typography type="h5">Just paste your YouTube link down below and click Start!</Typography>
+<Typography type="h5">YT-Translator uses AI to transcribe, translate, and voice-over YouTube videos—making global content accessible in your language.</Typography>
 </div>
 
 <div className=" mt-10 mx-auto max-w-md">
