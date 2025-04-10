@@ -1,22 +1,24 @@
 import { Button, Input } from "@material-tailwind/react";
 import { CloudUpload, NavArrowRight } from "iconoir-react";
+import { Typography } from "@material-tailwind/react";
 
 
 export default function Home() {
   return (
-    <div className="flex justify-center mt-40">
-      
-        
+    <div className="">
+<div className="mx-auto max-w-4xl sm:px-10 mt-10 text-center">
+  <Typography type="h1">Welcome to YT-Translator.</Typography>
+<Typography type="h5">Just paste your YouTube link down below and click Start!</Typography>
+</div>
 
-<form className=" mt-40 text-3xl">
-  <Input size="lg" placeholder="YouTube Link" className="p-4 mb-4"/>
-  <div className="flex flex-wrap justify-center gap-4">
-  <Button variant="gradient" className="rounded-lg">
-        Start Translation Job
-        <NavArrowRight className="ml-1 h-4 w-4 stroke-2" />
-      </Button>
-      </div>
-</form>
+<div className=" mt-10 mx-auto max-w-md">
+  <form className=" w-full flex justify-center gap-2" >
+    <Input size="lg" placeholder="YouTube Link" className="p-1 mb-2 w-90"/>
+    <Button variant="ghost" size='xs' className="rounded-lg w-25 p-1 mb-2">
+          Start
+        </Button>
+  </form>
+</div>
 
 
     </div>

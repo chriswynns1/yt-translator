@@ -75,7 +75,7 @@ export default function NavbarDemo() {
         <div className="hidden lg:block">
           <NavList />
         </div>
-        <Button size="sm" className="hidden lg:ml-auto lg:inline-block">
+        <Button size="lg" className="hidden lg:ml-auto lg:inline-block p-2">
           Sign In
         </Button>
         <IconButton
@@ -94,7 +94,7 @@ export default function NavbarDemo() {
       </div>
       <Collapse open={openNav}>
         <NavList />
-        <Button isFullWidth size="sm" className="mt-4">
+        <Button isFullWidth size="sm" className="mt-4 px-2">
           Sign In
         </Button>
       </Collapse>
