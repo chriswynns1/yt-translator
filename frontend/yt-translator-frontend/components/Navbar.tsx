@@ -8,14 +8,12 @@ import {
   Navbar,
 } from "@material-tailwind/react";
 import {
-  Archive,
   Clock,
   Menu,
-  MultiplePages,
   ProfileCircle,
-  SelectFace3d,
   Xmark,
 } from "iconoir-react";
+import { useAuth } from "react-oidc-context";
 
 const LINKS = [
   {
@@ -52,6 +50,7 @@ function NavList() {
 
 export default function NavbarDemo() {
   const [openNav, setOpenNav] = React.useState(false);
+  const auth = useAuth();
 
   React.useEffect(() => {
     window.addEventListener(
@@ -60,12 +59,19 @@ export default function NavbarDemo() {
     );
   }, []);
 
+  const signOutRedirect = () => {
+    const clientId = process.env.NEXT_PUBLIC_CLIENT_ID;
+    const logoutUri = "http://localhost:3001/"; // Update this for production
+    const cognitoDomain = "https://us-west-27i0e8mdwo.auth.us-west-2.amazoncognito.com";
+    window.location.href = `${cognitoDomain}/logout?client_id=${clientId}&logout_uri=${encodeURIComponent(logoutUri)}`;
+  };
+
   return (
     <Navbar className="mx-auto w-full max-w-screen-xl">
       <div className="flex items-center">
         <Typography
           as="a"
-          href="#"
+          href="/"
           type="small"
           className="ml-2 mr-2 block py-1 font-semibold"
         >
@@ -75,9 +81,23 @@ export default function NavbarDemo() {
         <div className="hidden lg:block">
           <NavList />
         </div>
-        <Button size="lg" className="hidden lg:ml-auto lg:inline-block p-2">
-          Sign In
-        </Button>
+        {auth.isAuthenticated ? (
+          <Button
+            size="lg"
+            className="hidden lg:ml-auto lg:inline-block p-2 rounded-lg"
+            onClick={() => auth.removeUser()}
+          >
+            Sign Out
+          </Button>
+        ) : (
+          <Button
+            size="lg"
+            className="hidden lg:ml-auto lg:inline-block p-2 rounded-lg"
+            onClick={() => auth.signinRedirect()}
+          >
+            Sign In
+          </Button>
+        )}
         <IconButton
           size="sm"
           variant="ghost"
@@ -85,18 +105,31 @@ export default function NavbarDemo() {
           onClick={() => setOpenNav(!openNav)}
           className="ml-auto grid lg:hidden"
         >
-          {openNav ? (
-            <Xmark className="h-4 w-4" />
-          ) : (
-            <Menu className="h-4 w-4" />
-          )}
+          {openNav ? <Xmark className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
         </IconButton>
       </div>
+
       <Collapse open={openNav}>
         <NavList />
-        <Button isFullWidth size="sm" className="mt-4 px-2">
-          Sign In
-        </Button>
+        {auth.isAuthenticated ? (
+          <Button
+            isFullWidth
+            size="sm"
+            className="mt-4 px-2 rounded-lg"
+            onClick={() => auth.removeUser()}
+          >
+            Sign Out
+          </Button>
+        ) : (
+          <Button
+            isFullWidth
+            size="sm"
+            className="mt-4 px-2"
+            onClick={() => auth.signinRedirect()}
+          >
+            Sign In
+          </Button>
+        )}
       </Collapse>
     </Navbar>
   );
