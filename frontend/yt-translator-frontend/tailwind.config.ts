@@ -1,27 +1,16 @@
-import type { Config } from "tailwindcss";
+import type { Config } from 'tailwindcss'
 
-import { mtConfig } from "@material-tailwind/react";
+export default {
+content: [
+  "./app/**/*.{js,ts,jsx,tsx,mdx}",
+  "./pages/**/*.{js,ts,jsx,tsx}",
+  "./components/**/*.{js,ts,jsx,tsx}",
 
-
-
-const config: Config = {
-
-  content: [
-
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
-
-    "./components/**/*.{js,ts,jsx,tsx,mdx}",
-
-    "./app/**/*.{js,ts,jsx,tsx,mdx}",
-
-    "./node_modules/@material-tailwind/react/**/*.{js,ts,jsx,tsx}"
-
-  ],
-
-  plugins: [mtConfig],
-
-};
-
-
-
-export default config;
+  // Or if using `src` directory:
+  "./src/**/*.{js,ts,jsx,tsx,mdx}",
+],
+theme: {
+  extend: {},
+},
+plugins: [],
+} satisfies Config
