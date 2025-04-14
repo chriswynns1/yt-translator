@@ -42,8 +42,8 @@ export async function POST(req: NextRequest) {
     console.log('Successfully wrote to DynamoDB');
 
     // Call your local API endpoint
-    const downloadApiUrl = 'http://localhost:3000/download';
-    const downloadApiPayload = { videoUrl };
+    const downloadApiUrl = 'http://10.0.0.125:3000/download';
+    const downloadApiPayload = { videoUrl, userId };
 
     console.log('Calling local API:', downloadApiUrl, downloadApiPayload);
 
