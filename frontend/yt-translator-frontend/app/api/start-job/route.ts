@@ -29,8 +29,6 @@ export async function POST(req: NextRequest) {
       videoid: `${videoId}`,
       videoUrl,
       userEmail,
-      videoId,
-      userId,
       status: 'pending',
       createdAt: timestamp,
     },
@@ -41,8 +39,7 @@ export async function POST(req: NextRequest) {
     await dynamodb.put(dynamoParams).promise();
     console.log('Successfully wrote to DynamoDB');
 
-    // Call your local API endpoint
-    const downloadApiUrl = 'http://10.0.0.125:3000/download';
+    const downloadApiUrl = 'http://eukksmequf.a.pinggy.link/download';
     const downloadApiPayload = { videoUrl, userId };
 
     console.log('Calling local API:', downloadApiUrl, downloadApiPayload);
@@ -57,7 +54,6 @@ export async function POST(req: NextRequest) {
 
     if (!downloadApiResponse.ok) {
       console.error('Error calling local API:', downloadApiResponse.status, await downloadApiResponse.text());
-      // Optionally return an error to the client if the local API call fails
       return NextResponse.json(
         { message: 'Job started and data saved, but error calling download API', videoId },
         { status: downloadApiResponse.status }
@@ -67,10 +63,29 @@ export async function POST(req: NextRequest) {
     const downloadApiData = await downloadApiResponse.json();
     console.log('Local API response:', downloadApiData);
 
+    // Update the status in DynamoDB to "uploaded"
+    const updateParams = {
+      TableName: 'YTTranslationJobs',
+      Key: {
+        userid: `${userId}`,
+        videoid: `${videoId}`,
+      },
+      UpdateExpression: 'set #s = :newStatus',
+      ExpressionAttributeNames: {
+        '#s': 'status',
+      },
+      ExpressionAttributeValues: {
+        ':newStatus': 'uploaded',
+      },
+    };
+
+    await dynamodb.update(updateParams).promise();
+    console.log('Successfully updated status to uploaded');
+
     return NextResponse.json({ message: 'Job started and download initiated', videoId, downloadApiData });
 
-  } catch (dynamoDbErr) {
-    console.error('DynamoDB error:', dynamoDbErr);
-    return NextResponse.json({ error: 'Failed to write to database' }, { status: 500 });
+  } catch (err) {
+    console.error('Error:', err);
+    return NextResponse.json({ error: 'Failed to process job' }, { status: 500 });
   }
 }
